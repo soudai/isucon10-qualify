@@ -28,8 +28,6 @@ CREATE TABLE isuumo.estate
     INDEX idx_door_height_t (door_height_t),
     INDEX idx_door_width_t (door_width_t),
 
-    INDEX idx_name (name),
-    INDEX idx_address (address),
     INDEX idx_rent (rent),
     INDEX idx_id_rent (id, rent),
     INDEX idx_door_height_door_width (door_height, door_width),
@@ -63,7 +61,6 @@ CREATE TABLE isuumo.chair
     INDEX idx_width_t (width_t),
     INDEX idx_depth_t (depth_t),
 
-    INDEX idx_name (name),
     INDEX idx_price (price),
     INDEX idx_depth (depth),
     INDEX idx_color (color),

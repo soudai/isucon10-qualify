@@ -45,7 +45,7 @@ CREATE TABLE isuumo.chair
     features    VARCHAR(64)     NOT NULL,
     kind        VARCHAR(64)     NOT NULL,
     popularity  INTEGER         NOT NULL,
-    stock       INTEGER         NOT NULL
+    stock       INTEGER         NOT NULL,
     INDEX idx_name (name),
     INDEX idx_description (description),
     INDEX idx_thumbnail (thumbnail),

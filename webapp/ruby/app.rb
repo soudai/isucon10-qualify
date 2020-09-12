@@ -131,6 +131,8 @@ class App < Sinatra::Base
   end
 
   post '/initialize' do
+    starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
     sql_dir = Pathname.new('../mysql/db')
     %w[0_Schema.sql 1_DummyEstateData.sql 2_DummyChairData.sql].each do |sql|
       sql_path = sql_dir.join(sql)
@@ -140,6 +142,10 @@ class App < Sinatra::Base
         io.close
       end
     end
+
+    ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    elapsed = ending - starting
+    puts "initialize: #{elapsed} seconds"
 
     { language: 'ruby' }.to_json
   end

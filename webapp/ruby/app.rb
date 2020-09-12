@@ -499,6 +499,8 @@ class App < Sinatra::Base
   end
 
   post '/api/estate/nazotte' do
+    starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
     coordinates = body_json_params[:coordinates]
 
     unless coordinates
@@ -525,7 +527,9 @@ class App < Sinatra::Base
     }
 
     sql = 'SELECT * FROM estate WHERE latitude <= ? AND latitude >= ? AND longitude <= ? AND longitude >= ? ORDER BY popularity DESC, id ASC'
-    estates = db.xquery(sql, bounding_box[:bottom_right][:latitude], bounding_box[:top_left][:latitude], bounding_box[:bottom_right][:longitude], bounding_box[:top_left][:longitude])
+    estates = db.xquery(sql, bounding_box[:bottom_right][:latitude], bounding_box[:top_left][:latitude], bounding_box[:bottom_right][:longitude], bounding_box[:top_left][:longitude]).to_a
+
+    puts "nazotte: #{estates.size} estates"
 
     estates_in_polygon = []
     estates.each do |estate|
@@ -535,8 +539,14 @@ class App < Sinatra::Base
       e = db.xquery(sql, estate[:id]).first
       if e
         estates_in_polygon << e
+        break if estates_in_polygon.size > NAZOTTE_LIMIT
       end
     end
+
+    ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    elapsed = ending - starting
+
+    puts "nazotte: #{elapsed} seconds"
 
     nazotte_estates = estates_in_polygon.take(NAZOTTE_LIMIT)
     {

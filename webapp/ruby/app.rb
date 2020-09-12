@@ -393,7 +393,7 @@ class App < Sinatra::Base
 
         if !row[9].nil? && row[9] != ''
           row[9].split(',').each do |feature|
-            feats.push feature, row[0]
+            feats << "('%s', %s)" % [feature, row[0]]
           end
         end
       end
@@ -402,8 +402,8 @@ class App < Sinatra::Base
       sql = "INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock, price_t, height_t, width_t, depth_t) VALUES #{rows.join(',')}"
       db.query(sql)
 
-      sql = "INSERT INTO chair_features (name, chair_id) values #{(['(?, ?)'] * feats.size).join(',')}"
-      db.xquery(sql, *feats)
+      sql = "INSERT INTO chair_features (name, chair_id) values #{feats.join(',')}"
+      db.query(sql)
     end
 
     status 201
@@ -675,7 +675,7 @@ class App < Sinatra::Base
 
         if !row[10].nil? && row[10] != ''
           row[10].split(',').each do |feature|
-            feats.push feature, row[0]
+            feats << "('%s', %s)" % [feature, row[0]]
           end
         end
       end
@@ -684,8 +684,8 @@ class App < Sinatra::Base
       sql = "INSERT INTO estate(id, name, description, thumbnail, address, latitude, longitude, rent, door_height, door_width, features, popularity, rent_t, door_height_t, door_width_t) VALUES #{rows.join(',')}"
       db.query(sql)
 
-      sql = "INSERT INTO estate_features (name, estate_id) values #{(['(?, ?)'] * feats.size).join(',')}"
-      db.xquery(sql, *feats)
+      sql = "INSERT INTO estate_features (name, estate_id) values #{feats.join(',')}"
+      db.query(sql)
     end
 
     status 201

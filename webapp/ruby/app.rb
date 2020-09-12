@@ -58,6 +58,7 @@ class App < Sinatra::Base
     ].each do |regexp|
       if regexp.match(request.user_agent)
         puts "BOT!!!!!!!!111: #{request.user_agent}"
+        halt 503
       end
     end
   end

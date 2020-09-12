@@ -531,7 +531,7 @@ SQL
   end
 
   post '/api/estate/nazotte' do
-    starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    #starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
     coordinates = body_json_params[:coordinates]
 
@@ -575,8 +575,8 @@ SQL
       end
     end
 
-    ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-    elapsed = ending - starting
+    #ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    #elapsed = ending - starting
 
     #puts "nazotte: #{elapsed} seconds"
 

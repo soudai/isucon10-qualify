@@ -368,7 +368,7 @@ class App < Sinatra::Base
         p row
         sql = 'INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         db.xquery(sql, *row.map(&:to_s))
-        if row[9] != ''
+        if !row[9].nil? && row[9] != ''
           row[9].split(',').each do |feature|
             sql = 'INSERT INTO chair_features (name, chair_id) values (?, ?)'
             db.xquery(sql, feature, row[0])

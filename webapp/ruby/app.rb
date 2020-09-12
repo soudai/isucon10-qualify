@@ -56,7 +56,7 @@ class App < Sinatra::Base
       /Isupider(-image)?\+/,
       /(bot|crawler|spider)(?:[-_ .\/;@()]|$)/i,
     ].each do |regexp|
-      if regexp.match(request.user_agent)
+      if regexp.match?(request.user_agent)
         puts "BOT!!!!!!!!111: #{request.user_agent}"
         halt 503
       end

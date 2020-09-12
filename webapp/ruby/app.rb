@@ -577,7 +577,7 @@ SQL
     ending = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     elapsed = ending - starting
 
-    puts "nazotte: #{elapsed} seconds"
+    #puts "nazotte: #{elapsed} seconds"
 
     nazotte_estates = estates_in_polygon.take(NAZOTTE_LIMIT)
     {

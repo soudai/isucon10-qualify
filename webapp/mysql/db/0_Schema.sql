@@ -1,5 +1,5 @@
 DROP DATABASE IF EXISTS isuumo;
-CREATE DATABASE isuumo;
+CREATE DATABASE isuumo COLLATE utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS isuumo.estate;
 DROP TABLE IF EXISTS isuumo.chair;

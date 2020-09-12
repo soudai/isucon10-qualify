@@ -40,7 +40,7 @@ class App < Sinatra::Base
   end
 
   configure do
-    enable :logging
+    # enable :logging
   end
 
   set :add_charset, ['application/json']

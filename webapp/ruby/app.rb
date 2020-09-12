@@ -153,7 +153,7 @@ class App < Sinatra::Base
     starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 
     sql_dir = Pathname.new('../mysql/db')
-    %w[0_Schema.sql 1_DummyEstateData.sql 2_DummyChairData.sql 3_EstateFeaturesData.sql 4_ChairFeaturesData.sql 5_FillTypes.sql].each do |sql|
+    %w[0_Schema.sql 1_EstateData_t.sql 2_ChairData_t.sql 3_EstateFeaturesData.sql 4_ChairFeaturesData.sql].each do |sql|
       sql_path = sql_dir.join(sql)
       cmd = ['mysql', '-h', db_info[:host], '-u', db_info[:username], "-p#{db_info[:password]}", '-P', db_info[:port], db_info[:database]]
       IO.popen(cmd, 'w') do |io|

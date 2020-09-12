@@ -1,33 +1,43 @@
+GIT
+  remote: https://github.com/brianmario/mysql2.git
+  revision: e2503dc6e8ad02f8c2f4fc71006f9840694e319c
+  specs:
+    mysql2 (0.5.3)
+
+GIT
+  remote: https://github.com/kamipo/mysql2-cs-bind.git
+  revision: 48bcac2e2cccf6381003b51dfddb71c7532ab950
+  specs:
+    mysql2-cs-bind (0.0.7)
+      mysql2
+
 GEM
   remote: https://rubygems.org/
   specs:
-    backports (3.18.2)
     kgio (2.11.3)
     multi_json (1.15.0)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
-    mysql2 (0.5.3)
-    mysql2-cs-bind (0.0.7)
-      mysql2
+    newrelic_rpm (6.11.0.365)
     rack (2.2.3)
-    rack-protection (2.0.8.1)
+    rack-protection (2.1.0)
       rack
     raindrops (0.19.1)
     ruby2_keywords (0.0.2)
-    sinatra (2.0.8.1)
+    sinatra (2.1.0)
       mustermann (~> 1.0)
-      rack (~> 2.0)
-      rack-protection (= 2.0.8.1)
+      rack (~> 2.2)
+      rack-protection (= 2.1.0)
       tilt (~> 2.0)
-    sinatra-contrib (2.0.8.1)
-      backports (>= 2.8.2)
+    sinatra-contrib (2.1.0)
       multi_json
       mustermann (~> 1.0)
-      rack-protection (= 2.0.8.1)
-      sinatra (= 2.0.8.1)
+      rack-protection (= 2.1.0)
+      sinatra (= 2.1.0)
       tilt (~> 2.0)
+    symbol-fstring (1.0.0)
     tilt (2.0.10)
-    unicorn (5.6.0)
+    unicorn (5.7.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
 
@@ -35,11 +45,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  mysql2
-  mysql2-cs-bind
+  mysql2!
+  mysql2-cs-bind!
+  newrelic_rpm (= 6.11.0.365)
   sinatra
   sinatra-contrib
+  symbol-fstring
   unicorn
 
 BUNDLED WITH
-   2.1.2
+   2.1.4

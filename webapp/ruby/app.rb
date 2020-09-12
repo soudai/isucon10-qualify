@@ -262,10 +262,14 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
-      params[:features].split(',').each do |feature_condition|
-        search_queries << "features LIKE CONCAT('%', ?, '%')"
-        query_params.push(feature_condition)
-      end
+      ids = db.xquery("SELECT chair_id id FROM chair_features WHERE name IN (?)", params[:features].split(',')).map { |r| r[:id] }
+      search_queries << "id IN (?)"
+      query_params << ids
+
+#       params[:features].split(',').each do |feature_condition|
+#         search_queries << "features LIKE CONCAT('%', ?, '%')"
+#         query_params.push(feature_condition)
+#       end
     end
 
     if search_queries.size == 0
@@ -442,10 +446,14 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
-      params[:features].split(',').each do |feature_condition|
-        search_queries << "features LIKE CONCAT('%', ?, '%')"
-        query_params.push(feature_condition)
-      end
+      ids = db.xquery("SELECT estate_id id FROM estate_features WHERE name IN (?)", params[:features].split(',')).map { |r| r[:id] }
+      search_queries << "id IN (?)"
+      query_params << ids
+
+#       params[:features].split(',').each do |feature_condition|
+#         search_queries << "features LIKE CONCAT('%', ?, '%')"
+#         query_params.push(feature_condition)
+#       end
     end
 
     if search_queries.size == 0

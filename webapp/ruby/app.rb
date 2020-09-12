@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sinatra'
 require 'mysql2'
 require 'mysql2-cs-bind'

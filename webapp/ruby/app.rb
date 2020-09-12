@@ -149,38 +149,6 @@ class App < Sinatra::Base
     end
   end
 
-  get '/initialize_estate_features' do
-    estates = db.query("SELECT id, features FROM estate WHERE features != ''").to_a
-
-    db.query("BEGIN")
-    estates.each do |estate|
-      estate_id = estate[:id]
-      features = estate[:features].split(",")
-
-      #p [estate_id, features]
-      features.each do |feature|
-        db.xquery("REPLACE INTO estate_features VALUES (?,?)", feature, estate_id)
-      end
-    end
-    db.query("COMMIT")
-  end
-
-  get '/initialize_chair_features' do
-    chairs = db.query("SELECT id, features FROM chair WHERE features != ''").to_a
-
-    db.query("BEGIN")
-    chairs.each do |chair|
-      chair_id = chair[:id]
-      features = chair[:features].split(",")
-
-      #p [chair_id, features]
-      features.each do |feature|
-        db.xquery("REPLACE INTO chair_features VALUES (?,?)", feature, chair_id)
-      end
-    end
-    db.query("COMMIT")
-  end
-
   post '/initialize' do
     starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 

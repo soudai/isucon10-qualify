@@ -389,7 +389,7 @@ class App < Sinatra::Base
         else "3"
         end
 
-        rows.concat row.map!(&:to_s)
+        rows << "(%s, '%s', '%s', '%s', %s, %s, %s, %s, '%s', '%s', '%s', %s, %s, %s, %s, %s, %s)" % row.map!(&:to_s)
 
         if !row[9].nil? && row[9] != ''
           row[9].split(',').each do |feature|
@@ -399,8 +399,8 @@ class App < Sinatra::Base
       end
 
     transaction('post_api_chair') do
-      sql = "INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock, price_t, height_t, width_t, depth_t) VALUES #{(['(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'] * rows.size).join(',')}"
-      db.xquery(sql, *rows)
+      sql = "INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock, price_t, height_t, width_t, depth_t) VALUES #{rows.join(',')}"
+      db.query(sql)
 
       sql = "INSERT INTO chair_features (name, chair_id) values #{(['(?, ?)'] * feats.size).join(',')}"
       db.xquery(sql, *feats)
@@ -671,7 +671,7 @@ class App < Sinatra::Base
         else "3"
         end
 
-        rows.concat row.map!(&:to_s)
+        rows << "(%s, '%s', '%s', '%s', '%s', %s, %s, %s, %s, %s, '%s', %s, %s, %s, %s)" % row.map!(&:to_s)
 
         if !row[10].nil? && row[10] != ''
           row[10].split(',').each do |feature|
@@ -681,8 +681,8 @@ class App < Sinatra::Base
       end
 
     transaction('post_api_estate') do
-      sql = "INSERT INTO estate(id, name, description, thumbnail, address, latitude, longitude, rent, door_height, door_width, features, popularity, rent_t, door_height_t, door_width_t) VALUES #{(['(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'] * rows.size).join(',')}"
-      db.xquery(sql, *rows)
+      sql = "INSERT INTO estate(id, name, description, thumbnail, address, latitude, longitude, rent, door_height, door_width, features, popularity, rent_t, door_height_t, door_width_t) VALUES #{rows.join(',')}"
+      db.query(sql)
 
       sql = "INSERT INTO estate_features (name, estate_id) values #{(['(?, ?)'] * feats.size).join(',')}"
       db.xquery(sql, *feats)

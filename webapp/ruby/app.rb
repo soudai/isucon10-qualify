@@ -33,6 +33,18 @@ class App < Sinatra::Base
   NAZOTTE_LIMIT = 50
   CHAIR_SEARCH_CONDITION = JSON.parse(File.read('../fixture/chair_condition.json'), symbolize_names: true)
   ESTATE_SEARCH_CONDITION = JSON.parse(File.read('../fixture/estate_condition.json'), symbolize_names: true)
+  BOT_REGEXP = [
+    /ISUCONbot(-Mobile)?/,
+    /ISUCONbot-Image\//,
+    /Mediapartners-ISUCON/,
+    /ISUCONCoffee/,
+    /ISUCONFeedSeeker(Beta)?/,
+    /crawler \(https:\/\/isucon\.invalid\/(support\/faq\/|help\/jp\/)/,
+    /isubot/,
+    /Isupider/,
+    /Isupider(-image)?\+/,
+    /(bot|crawler|spider)(?:[-_ .\/;@()]|$)/i,
+  ]
 
   configure :development do
     require 'sinatra/reloader'
@@ -44,20 +56,8 @@ class App < Sinatra::Base
   end
 
   before do
-    [
-      /ISUCONbot(-Mobile)?/,
-      /ISUCONbot-Image\//,
-      /Mediapartners-ISUCON/,
-      /ISUCONCoffee/,
-      /ISUCONFeedSeeker(Beta)?/,
-      /crawler \(https:\/\/isucon\.invalid\/(support\/faq\/|help\/jp\/)/,
-      /isubot/,
-      /Isupider/,
-      /Isupider(-image)?\+/,
-      /(bot|crawler|spider)(?:[-_ .\/;@()]|$)/i,
-    ].each do |regexp|
+    BOT_REGEXP.each do |regexp|
       if regexp.match?(request.user_agent)
-        puts "BOT!!!!!!!!111: #{request.user_agent}"
         halt 503
       end
     end

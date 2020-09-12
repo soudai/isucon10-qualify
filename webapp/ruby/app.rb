@@ -333,14 +333,12 @@ class App < Sinatra::Base
 
     transaction('post_api_chair') do
       CSV.parse(params[:chairs][:tempfile].read, skip_blanks: true) do |row|
-        p row
         sql = 'INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         db.xquery(sql, *row.map(&:to_s))
         if !row[9].nil? && row[9] != ''
           row[9].split(',').each do |feature|
             sql = 'INSERT INTO chair_features (name, chair_id) values (?, ?)'
             db.xquery(sql, feature, row[0])
-            p [feature, row[0]]
           end
         end
       end
@@ -557,6 +555,12 @@ class App < Sinatra::Base
       CSV.parse(params[:estates][:tempfile].read, skip_blanks: true) do |row|
         sql = 'INSERT INTO estate(id, name, description, thumbnail, address, latitude, longitude, rent, door_height, door_width, features, popularity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         db.xquery(sql, *row.map(&:to_s))
+        if !row[10].nil? && row[10] != ''
+          row[10].split(',').each do |feature|
+            sql = 'INSERT INTO estate_features (name, estate_id) values (?, ?)'
+            db.xquery(sql, feature, row[0])
+          end
+        end
       end
     end
 

@@ -57,7 +57,7 @@ CREATE TABLE isuumo.chair
     INDEX idx_popularity (popularity),
     INDEX idx_stock (stock),
     INDEX idx_height_width (height, width),
-    INDEX idx_width_height (width, height),
+    INDEX idx_width_height (width, height)
 );
 
 CREATE TABLE isuumo.estate_features

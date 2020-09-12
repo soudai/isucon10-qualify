@@ -262,6 +262,7 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
+      features = params[:features].split(',')
       ids = db.xquery("SELECT chair_id id, COUNT(*) num FROM chair_features WHERE name IN (?) GROUP BY chair_id HAVING num = ?", features, features.size).map { |r| r[:id] }
       search_queries << "id IN (?)"
       query_params << ids

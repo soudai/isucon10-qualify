@@ -262,19 +262,19 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
-#       features = params[:features].split(',')
-#       ids = db.xquery("SELECT chair_id id, COUNT(*) num FROM chair_features WHERE name IN (?) GROUP BY chair_id HAVING num = ?", features, features.size).map { |r| r[:id] }
-#       if ids.empty?
-#         search_queries << "1!=1"
-#       else
-#         search_queries << "id IN (?)"
-#         query_params << ids
-#       end
-
-      params[:features].split(',').each do |feature_condition|
-        search_queries << "features LIKE CONCAT('%', ?, '%')"
-        query_params.push(feature_condition)
+      features = params[:features].split(',')
+      ids = db.xquery("SELECT chair_id id, COUNT(*) num FROM chair_features WHERE name IN (?) GROUP BY chair_id HAVING num = ?", features, features.size).map { |r| r[:id] }
+      if ids.empty?
+        search_queries << "1!=1"
+      else
+        search_queries << "id IN (?)"
+        query_params << ids
       end
+
+#       params[:features].split(',').each do |feature_condition|
+#         search_queries << "features LIKE CONCAT('%', ?, '%')"
+#         query_params.push(feature_condition)
+#       end
     end
 
     if search_queries.size == 0
@@ -344,12 +344,12 @@ class App < Sinatra::Base
       CSV.parse(params[:chairs][:tempfile].read, skip_blanks: true) do |row|
         sql = 'INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         db.xquery(sql, *row.map(&:to_s))
-#         if !row[9].nil? && row[9] != ''
-#           row[9].split(',').each do |feature|
-#             sql = 'INSERT INTO chair_features (name, chair_id) values (?, ?)'
-#             db.xquery(sql, feature, row[0])
-#           end
-#         end
+        if !row[9].nil? && row[9] != ''
+          row[9].split(',').each do |feature|
+            sql = 'INSERT INTO chair_features (name, chair_id) values (?, ?)'
+            db.xquery(sql, feature, row[0])
+          end
+        end
       end
     end
 
@@ -451,19 +451,19 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
-#       features = params[:features].split(',')
-#       ids = db.xquery("SELECT estate_id id, COUNT(*) num FROM estate_features WHERE name IN (?) GROUP BY estate_id HAVING num = ?", features, features.size).map { |r| r[:id] }
-#       if ids.empty?
-#         search_queries << "1!=1"
-#       else
-#         search_queries << "id IN (?)"
-#         query_params << ids
-#       end
-
-      params[:features].split(',').each do |feature_condition|
-        search_queries << "features LIKE CONCAT('%', ?, '%')"
-        query_params.push(feature_condition)
+      features = params[:features].split(',')
+      ids = db.xquery("SELECT estate_id id, COUNT(*) num FROM estate_features WHERE name IN (?) GROUP BY estate_id HAVING num = ?", features, features.size).map { |r| r[:id] }
+      if ids.empty?
+        search_queries << "1!=1"
+      else
+        search_queries << "id IN (?)"
+        query_params << ids
       end
+
+#       params[:features].split(',').each do |feature_condition|
+#         search_queries << "features LIKE CONCAT('%', ?, '%')"
+#         query_params.push(feature_condition)
+#       end
     end
 
     if search_queries.size == 0
@@ -583,12 +583,12 @@ class App < Sinatra::Base
       CSV.parse(params[:estates][:tempfile].read, skip_blanks: true) do |row|
         sql = 'INSERT INTO estate(id, name, description, thumbnail, address, latitude, longitude, rent, door_height, door_width, features, popularity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
         db.xquery(sql, *row.map(&:to_s))
-#         if !row[10].nil? && row[10] != ''
-#           row[10].split(',').each do |feature|
-#             sql = 'INSERT INTO estate_features (name, estate_id) values (?, ?)'
-#             db.xquery(sql, feature, row[0])
-#           end
-#         end
+        if !row[10].nil? && row[10] != ''
+          row[10].split(',').each do |feature|
+            sql = 'INSERT INTO estate_features (name, estate_id) values (?, ?)'
+            db.xquery(sql, feature, row[0])
+          end
+        end
       end
     end
 

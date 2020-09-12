@@ -24,6 +24,7 @@ CREATE TABLE isuumo.estate
     INDEX idx_thumbnail (thumbnail),
     INDEX idx_address (address),
     INDEX idx_rent (rent),
+    INDEX idx_id_rent (id, rent),
     INDEX idx_door_height_door_width (door_height, door_width),
     INDEX idx_door_width_door_height (door_width, door_height),
     INDEX idx_latitude_longitude (latitude, longitude),
@@ -54,7 +55,7 @@ CREATE TABLE isuumo.chair
     INDEX idx_kind (kind),
     INDEX idx_popularity (popularity),
     INDEX idx_stock (stock),
-    INDEX idx_price_stock (price, stock),
+    INDEX idx_stock_price (price, stock),
     INDEX idx_height_width (height, width),
     INDEX idx_width_height (width, height)
 );

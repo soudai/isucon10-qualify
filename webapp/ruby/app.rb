@@ -97,7 +97,7 @@ class App < Sinatra::Base
       yield(name)
       commit_transaction(name)
     rescue Exception => e
-      logger.error "Failed to commit tx: #{e.inspect}"
+      puts "Failed to commit tx: #{e.inspect}"
       rollback_transaction(name)
       raise
     ensure
@@ -125,7 +125,7 @@ class App < Sinatra::Base
     def ensure_to_abort_transaction(name)
       Thread.current[:db_transaction] ||= {}
       if in_transaction?(name)
-        logger.warn "Transaction closed implicitly (#{$$}, #{Thread.current.object_id}): #{name}"
+        puts "Transaction closed implicitly (#{$$}, #{Thread.current.object_id}): #{name}"
         rollback_transaction(name)
       end
     end
@@ -144,7 +144,7 @@ class App < Sinatra::Base
     def body_json_params
       @body_json_params ||= JSON.parse(request.body.tap(&:rewind).read, symbolize_names: true)
     rescue JSON::ParserError => e
-      logger.error "Failed to parse body: #{e.inspect}"
+      puts "Failed to parse body: #{e.inspect}"
       halt 400
     end
   end
@@ -182,7 +182,7 @@ class App < Sinatra::Base
     if params[:priceRangeId] && params[:priceRangeId].size > 0
       chair_price = CHAIR_SEARCH_CONDITION[:price][:ranges][params[:priceRangeId].to_i]
       unless chair_price
-        logger.error "priceRangeID invalid: #{params[:priceRangeId]}"
+        puts "priceRangeID invalid: #{params[:priceRangeId]}"
         halt 400
       end
 
@@ -200,7 +200,7 @@ class App < Sinatra::Base
     if params[:heightRangeId] && params[:heightRangeId].size > 0
       chair_height = CHAIR_SEARCH_CONDITION[:height][:ranges][params[:heightRangeId].to_i]
       unless chair_height
-        logger.error "heightRangeId invalid: #{params[:heightRangeId]}"
+        puts "heightRangeId invalid: #{params[:heightRangeId]}"
         halt 400
       end
 
@@ -218,7 +218,7 @@ class App < Sinatra::Base
     if params[:widthRangeId] && params[:widthRangeId].size > 0
       chair_width = CHAIR_SEARCH_CONDITION[:width][:ranges][params[:widthRangeId].to_i]
       unless chair_width
-        logger.error "widthRangeId invalid: #{params[:widthRangeId]}"
+        puts "widthRangeId invalid: #{params[:widthRangeId]}"
         halt 400
       end
 
@@ -236,7 +236,7 @@ class App < Sinatra::Base
     if params[:depthRangeId] && params[:depthRangeId].size > 0
       chair_depth = CHAIR_SEARCH_CONDITION[:depth][:ranges][params[:depthRangeId].to_i]
       unless chair_depth
-        logger.error "depthRangeId invalid: #{params[:depthRangeId]}"
+        puts "depthRangeId invalid: #{params[:depthRangeId]}"
         halt 400
       end
 
@@ -278,7 +278,7 @@ class App < Sinatra::Base
     end
 
     if search_queries.size == 0
-      logger.error "Search condition not found"
+      puts "Search condition not found"
       halt 400
     end
 
@@ -288,7 +288,7 @@ class App < Sinatra::Base
       begin
         Integer(params[:page], 10)
       rescue ArgumentError => e
-        logger.error "Invalid format page parameter: #{e.inspect}"
+        puts "Invalid format page parameter: #{e.inspect}"
         halt 400
       end
 
@@ -296,7 +296,7 @@ class App < Sinatra::Base
       begin
         Integer(params[:perPage], 10)
       rescue ArgumentError => e
-        logger.error "Invalid format perPage parameter: #{e.inspect}"
+        puts "Invalid format perPage parameter: #{e.inspect}"
         halt 400
       end
 
@@ -316,18 +316,18 @@ class App < Sinatra::Base
       begin
         Integer(params[:id], 10)
       rescue ArgumentError => e
-        logger.error "Request parameter \"id\" parse error: #{e.inspect}"
+        puts "Request parameter \"id\" parse error: #{e.inspect}"
         halt 400
       end
 
     chair = db.xquery('SELECT * FROM chair WHERE id = ?', id).first
     unless chair
-      logger.info "Requested id's chair not found: #{id}"
+      puts "Requested id's chair not found: #{id}"
       halt 404
     end
 
     if chair[:stock] <= 0
-      logger.info "Requested id's chair is sold out: #{id}"
+      puts "Requested id's chair is sold out: #{id}"
       halt 404
     end
 
@@ -336,7 +336,7 @@ class App < Sinatra::Base
 
   post '/api/chair' do
     if !params[:chairs] || !params[:chairs].respond_to?(:key) || !params[:chairs].key?(:tempfile)
-      logger.error 'Failed to get form file'
+      puts 'Failed to get form file'
       halt 400
     end
 
@@ -358,7 +358,7 @@ class App < Sinatra::Base
 
   post '/api/chair/buy/:id' do
     unless body_json_params[:email]
-      logger.error 'post buy chair failed: email not found in request body'
+      puts 'post buy chair failed: email not found in request body'
       halt 400
     end
 
@@ -366,7 +366,7 @@ class App < Sinatra::Base
       begin
         Integer(params[:id], 10)
       rescue ArgumentError => e
-        logger.error "post buy chair failed: #{e.inspect}"
+        puts "post buy chair failed: #{e.inspect}"
         halt 400
       end
 
@@ -399,7 +399,7 @@ class App < Sinatra::Base
     if params[:doorHeightRangeId] && params[:doorHeightRangeId].size > 0
       door_height = ESTATE_SEARCH_CONDITION[:doorHeight][:ranges][params[:doorHeightRangeId].to_i]
       unless door_height
-        logger.error "doorHeightRangeId invalid: #{params[:doorHeightRangeId]}"
+        puts "doorHeightRangeId invalid: #{params[:doorHeightRangeId]}"
         halt 400
       end
 
@@ -417,7 +417,7 @@ class App < Sinatra::Base
     if params[:doorWidthRangeId] && params[:doorWidthRangeId].size > 0
       door_width = ESTATE_SEARCH_CONDITION[:doorWidth][:ranges][params[:doorWidthRangeId].to_i]
       unless door_width
-        logger.error "doorWidthRangeId invalid: #{params[:doorWidthRangeId]}"
+        puts "doorWidthRangeId invalid: #{params[:doorWidthRangeId]}"
         halt 400
       end
 
@@ -435,7 +435,7 @@ class App < Sinatra::Base
     if params[:rentRangeId] && params[:rentRangeId].size > 0
       rent = ESTATE_SEARCH_CONDITION[:rent][:ranges][params[:rentRangeId].to_i]
       unless rent
-        logger.error "rentRangeId invalid: #{params[:rentRangeId]}"
+        puts "rentRangeId invalid: #{params[:rentRangeId]}"
         halt 400
       end
 
@@ -467,7 +467,7 @@ class App < Sinatra::Base
     end
 
     if search_queries.size == 0
-      logger.error "Search condition not found"
+      puts "Search condition not found"
       halt 400
     end
 
@@ -475,7 +475,7 @@ class App < Sinatra::Base
       begin
         Integer(params[:page], 10)
       rescue ArgumentError => e
-        logger.error "Invalid format page parameter: #{e.inspect}"
+        puts "Invalid format page parameter: #{e.inspect}"
         halt 400
       end
 
@@ -483,7 +483,7 @@ class App < Sinatra::Base
       begin
         Integer(params[:perPage], 10)
       rescue ArgumentError => e
-        logger.error "Invalid format perPage parameter: #{e.inspect}"
+        puts "Invalid format perPage parameter: #{e.inspect}"
         halt 400
       end
 
@@ -504,12 +504,12 @@ class App < Sinatra::Base
     coordinates = body_json_params[:coordinates]
 
     unless coordinates
-      logger.error "post search estate nazotte failed: coordinates not found"
+      puts "post search estate nazotte failed: coordinates not found"
       halt 400
     end
 
     if !coordinates.is_a?(Array) || coordinates.empty?
-      logger.error "post search estate nazotte failed: coordinates are empty"
+      puts "post search estate nazotte failed: coordinates are empty"
       halt 400
     end
 
@@ -560,13 +560,13 @@ class App < Sinatra::Base
       begin
         Integer(params[:id], 10)
       rescue ArgumentError => e
-        logger.error "Request parameter \"id\" parse error: #{e.inspect}"
+        puts "Request parameter \"id\" parse error: #{e.inspect}"
         halt 400
       end
 
     estate = db.xquery('SELECT * FROM estate WHERE id = ?', id).first
     unless estate
-      logger.info "Requested id's estate not found: #{id}"
+      puts "Requested id's estate not found: #{id}"
       halt 404
     end
 
@@ -575,7 +575,7 @@ class App < Sinatra::Base
 
   post '/api/estate' do
     unless params[:estates]
-      logger.error 'Failed to get form file'
+      puts 'Failed to get form file'
       halt 400
     end
 
@@ -597,7 +597,7 @@ class App < Sinatra::Base
 
   post '/api/estate/req_doc/:id' do
     unless body_json_params[:email]
-      logger.error 'post request document failed: email not found in request body'
+      puts 'post request document failed: email not found in request body'
       halt 400
     end
 
@@ -605,13 +605,13 @@ class App < Sinatra::Base
       begin
         Integer(params[:id], 10)
       rescue ArgumentError => e
-        logger.error "post request document failed: #{e.inspect}"
+        puts "post request document failed: #{e.inspect}"
         halt 400
       end
 
     estate = db.xquery('SELECT * FROM estate WHERE id = ?', id).first
     unless estate
-      logger.error "Requested id's estate not found: #{id}"
+      puts "Requested id's estate not found: #{id}"
       halt 404
     end
 
@@ -629,13 +629,13 @@ class App < Sinatra::Base
       begin
         Integer(params[:id], 10)
       rescue ArgumentError => e
-        logger.error "Request parameter \"id\" parse error: #{e.inspect}"
+        puts "Request parameter \"id\" parse error: #{e.inspect}"
         halt 400
       end
 
     chair = db.xquery('SELECT * FROM chair WHERE id = ?', id).first
     unless chair
-      logger.error "Requested id's chair not found: #{id}"
+      puts "Requested id's chair not found: #{id}"
       halt 404
     end
 

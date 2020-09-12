@@ -5,29 +5,6 @@ require 'mysql2'
 require 'mysql2-cs-bind'
 require 'csv'
 
-require 'newrelic_rpm'
-require 'new_relic/agent/method_tracer'
-require 'new_relic/agent/tracer'
-
-
-class Mysql2ClientWithNewRelic < Mysql2::Client
-  def initialize(*args)
-    super
-  end
-
-  def query(sql, *args)
-    callback = -> (result, metrics, elapsed) do
-      NewRelic::Agent::Datastores.notice_sql(sql, metrics, elapsed)
-    end
-    op = sql[/^(select|insert|update|delete|begin|commit|rollback)/i] || 'other'
-    table = sql[/\bchair|estate\b/] || 'other'
-    NewRelic::Agent::Datastores.wrap('MySQL', op, table, callback) do
-      super
-    end
-  end
-end
-
-
 class App < Sinatra::Base
   LIMIT = 20
   NAZOTTE_LIMIT = 50
@@ -77,10 +54,7 @@ class App < Sinatra::Base
     end
 
     def db
-      #Thread.current[:db] ||= Mysql2::Client.new(
-      return Thread.current[:db] if Thread.current[:db]
-
-      params = {
+      Thread.current[:db] ||= Mysql2::Client.new(
         host: db_info[:host],
         port: db_info[:port],
         username: db_info[:username],
@@ -88,9 +62,7 @@ class App < Sinatra::Base
         database: db_info[:database],
         reconnect: true,
         symbolize_keys: true,
-      }
-
-      Thread.current[:db] = ENV['NEW_RELIC_AGENT_ENABLED'] ? Mysql2ClientWithNewRelic.new(params) : Mysql2::Client.new(params)
+      )
     end
 
     def transaction(name)

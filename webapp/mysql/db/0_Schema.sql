@@ -36,3 +36,17 @@ CREATE TABLE isuumo.chair
     popularity  INTEGER         NOT NULL,
     stock       INTEGER         NOT NULL
 );
+
+CREATE TABLE isuumo.estate_features
+(
+    name        VARCHAR(64)         NOT NULL,
+    estate_id   INTEGER             NOT NULL,
+    PRIMARY KEY (name, estate_id)
+);
+
+CREATE TABLE isuumo.chair_features
+(
+    name        VARCHAR(64)         NOT NULL,
+    chair_id    INTEGER             NOT NULL,
+    PRIMARY KEY (name, chair_id)
+);

@@ -354,17 +354,51 @@ class App < Sinatra::Base
 
     transaction('post_api_chair') do
       CSV.parse(params[:chairs][:tempfile].read, skip_blanks: true) do |row|
-        sql = 'INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-        db.xquery(sql, *row.map(&:to_s))
-        db.xquery(<<-SQL, row[0])
-UPDATE chair
-SET price_t = CASE WHEN price < 3000 THEN 0 WHEN price < 6000 THEN 1 WHEN price < 9000 THEN 2
-                   WHEN price < 12000 THEN 3 WHEN price < 15000 THEN 4 ELSE 5 END,
-    height_t = CASE WHEN height < 80 THEN 0 WHEN height < 110 THEN 1 WHEN height < 150 THEN 2 ELSE 3 END,
-    width_t = CASE WHEN width < 80 THEN 0 WHEN width < 110 THEN 1 WHEN width < 150 THEN 2 ELSE 3 END,
-    depth_t = CASE WHEN depth < 80 THEN 0 WHEN depth < 110 THEN 1 WHEN depth < 150 THEN 2 ELSE 3 END
-WHERE id = ?
-SQL
+        #  0,    1,           2,         3,     4,      5,     6,     7,     8,        9,   10,         11,    12
+        # id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock
+        price, height, width, depth = row[4].to_i, row[5].to_i, row[6].to_i, row[7].to_i
+
+        row << case
+        when price < 3000 then "0"
+        when price < 6000 then "1"
+        when price < 9000 then "2"
+        when price < 12000 then "3"
+        when price < 15000 then "4"
+        else "5"
+        end
+
+        row << case
+        when height < 80 then "0"
+        when height < 110 then "1"
+        when height < 150 then "2"
+        else "3"
+        end
+
+        row << case
+        when width < 80 then "0"
+        when width < 110 then "1"
+        when width < 150 then "2"
+        else "3"
+        end
+
+        row << case
+        when depth < 80 then "0"
+        when depth < 110 then "1"
+        when depth < 150 then "2"
+        else "3"
+        end
+
+        sql = 'INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock, price_t, height_t, width_t, depth_t) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+        db.xquery(sql, *row.map!(&:to_s))
+#         db.xquery(<<-SQL, row[0])
+# UPDATE chair
+# SET price_t = CASE WHEN price < 3000 THEN 0 WHEN price < 6000 THEN 1 WHEN price < 9000 THEN 2
+#                    WHEN price < 12000 THEN 3 WHEN price < 15000 THEN 4 ELSE 5 END,
+#     height_t = CASE WHEN height < 80 THEN 0 WHEN height < 110 THEN 1 WHEN height < 150 THEN 2 ELSE 3 END,
+#     width_t = CASE WHEN width < 80 THEN 0 WHEN width < 110 THEN 1 WHEN width < 150 THEN 2 ELSE 3 END,
+#     depth_t = CASE WHEN depth < 80 THEN 0 WHEN depth < 110 THEN 1 WHEN depth < 150 THEN 2 ELSE 3 END
+# WHERE id = ?
+# SQL
         if !row[9].nil? && row[9] != ''
           row[9].split(',').each do |feature|
             sql = 'INSERT INTO chair_features (name, chair_id) values (?, ?)'
@@ -613,15 +647,40 @@ SQL
 
     transaction('post_api_estate') do
       CSV.parse(params[:estates][:tempfile].read, skip_blanks: true) do |row|
-        sql = 'INSERT INTO estate(id, name, description, thumbnail, address, latitude, longitude, rent, door_height, door_width, features, popularity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-        db.xquery(sql, *row.map(&:to_s))
-        db.xquery(<<-SQL, row[0])
-UPDATE estate
-SET rent_t = CASE WHEN rent < 50000 THEN 0 WHEN rent < 100000 THEN 1 WHEN rent < 150000 THEN 2 ELSE 3 END,
-    door_height_t = CASE WHEN door_height < 80 THEN 0 WHEN door_height < 110 THEN 1 WHEN door_height < 150 THEN 2 ELSE 3 END,
-    door_width_t = CASE WHEN door_width < 80 THEN 0 WHEN door_width < 110 THEN 1 WHEN door_width < 150 THEN 2 ELSE 3 END 
-WHERE id = ?
-SQL
+        #  0,    1,           2,         3,       4,        5,         6,    7,           8,          9,       10,         11
+        # id, name, description, thumbnail, address, latitude, longitude, rent, door_height, door_width, features, popularity
+        rent, door_height, door_width = row[7].to_i, row[8].to_i, row[9].to_i
+
+        row << case
+        when rent < 50000 then "0"
+        when rent < 100000 then "1"
+        when rent < 150000 then "2"
+        else "3"
+        end
+
+        row << case
+        when door_height < 80 then "0"
+        when door_height < 110 then "1"
+        when door_height < 150 then "2"
+        else "3"
+        end
+
+        row << case
+        when door_width < 80 then "0"
+        when door_width < 110 then "1"
+        when door_width < 150 then "2"
+        else "3"
+        end
+
+        sql = 'INSERT INTO estate(id, name, description, thumbnail, address, latitude, longitude, rent, door_height, door_width, features, popularity, rent_t, door_height_t, door_width_t) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+        db.xquery(sql, *row.map!(&:to_s))
+#         db.xquery(<<-SQL, row[0])
+# UPDATE estate
+# SET rent_t = CASE WHEN rent < 50000 THEN 0 WHEN rent < 100000 THEN 1 WHEN rent < 150000 THEN 2 ELSE 3 END,
+#     door_height_t = CASE WHEN door_height < 80 THEN 0 WHEN door_height < 110 THEN 1 WHEN door_height < 150 THEN 2 ELSE 3 END,
+#     door_width_t = CASE WHEN door_width < 80 THEN 0 WHEN door_width < 110 THEN 1 WHEN door_width < 150 THEN 2 ELSE 3 END
+# WHERE id = ?
+# SQL
         if !row[10].nil? && row[10] != ''
           row[10].split(',').each do |feature|
             sql = 'INSERT INTO estate_features (name, estate_id) values (?, ?)'

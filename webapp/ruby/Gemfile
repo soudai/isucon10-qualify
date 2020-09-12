@@ -10,4 +10,4 @@ gem 'symbol-fstring', require: 'fstring/all'
 gem "unicorn"
 gem "puma"
 
-gem 'newrelic_rpm', '6.11.0.365'
+gem 'newrelic_rpm', '6.11.0.365', require: false

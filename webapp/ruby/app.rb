@@ -557,7 +557,7 @@ class App < Sinatra::Base
     count = db.xquery("#{count_prefix}#{search_condition}", query_params).first[:count]
     estates = db.xquery("#{sqlprefix}#{search_condition}#{limit_offset}", query_params).to_a
 
-    puts "/api/estate/search: #{page} page, #{search_condition}, #{query_params.inspect}"
+    # puts "/api/estate/search: #{page} page, #{search_condition}, #{query_params.inspect}"
 
     { count: count, estates: estates.map! { |e| camelize_keys_for_estate(e) } }.to_json
   end

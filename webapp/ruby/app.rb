@@ -180,75 +180,86 @@ class App < Sinatra::Base
     query_params = []
 
     if params[:priceRangeId] && params[:priceRangeId].size > 0
-      chair_price = CHAIR_SEARCH_CONDITION[:price][:ranges][params[:priceRangeId].to_i]
-      unless chair_price
-        puts "priceRangeID invalid: #{params[:priceRangeId]}"
-        halt 400
-      end
+      search_queries << 'price_t = ?'
+      query_params << params[:priceRangeId].to_i
 
-      if chair_price[:min] != -1
-        search_queries << 'price >= ?'
-        query_params << chair_price[:min]
-      end
+      # chair_price = CHAIR_SEARCH_CONDITION[:price][:ranges][params[:priceRangeId].to_i]
+      # unless chair_price
+      #   puts "priceRangeID invalid: #{params[:priceRangeId]}"
+      #   halt 400
+      # end
 
-      if chair_price[:max] != -1
-        search_queries << 'price < ?'
-        query_params << chair_price[:max]
-      end
+      # if chair_price[:min] != -1
+      #   search_queries << 'price >= ?'
+      #   query_params << chair_price[:min]
+      # end
+
+      # if chair_price[:max] != -1
+      #   search_queries << 'price < ?'
+      #   query_params << chair_price[:max]
+      # end
     end
 
     if params[:heightRangeId] && params[:heightRangeId].size > 0
-      chair_height = CHAIR_SEARCH_CONDITION[:height][:ranges][params[:heightRangeId].to_i]
-      unless chair_height
-        puts "heightRangeId invalid: #{params[:heightRangeId]}"
-        halt 400
-      end
+      search_queries << 'height_t = ?'
+      query_params << params[:heightRangeId].to_i
 
-      if chair_height[:min] != -1
-        search_queries << 'height >= ?'
-        query_params << chair_height[:min]
-      end
+      # chair_height = CHAIR_SEARCH_CONDITION[:height][:ranges][params[:heightRangeId].to_i]
+      # unless chair_height
+      #   puts "heightRangeId invalid: #{params[:heightRangeId]}"
+      #   halt 400
+      # end
 
-      if chair_height[:max] != -1
-        search_queries << 'height < ?'
-        query_params << chair_height[:max]
-      end
+      # if chair_height[:min] != -1
+      #   search_queries << 'height >= ?'
+      #   query_params << chair_height[:min]
+      # end
+
+      # if chair_height[:max] != -1
+      #   search_queries << 'height < ?'
+      #   query_params << chair_height[:max]
+      # end
     end
 
     if params[:widthRangeId] && params[:widthRangeId].size > 0
-      chair_width = CHAIR_SEARCH_CONDITION[:width][:ranges][params[:widthRangeId].to_i]
-      unless chair_width
-        puts "widthRangeId invalid: #{params[:widthRangeId]}"
-        halt 400
-      end
+      search_queries << 'width_t = ?'
+      query_params << params[:widthRangeId].to_i
 
-      if chair_width[:min] != -1
-        search_queries << 'width >= ?'
-        query_params << chair_width[:min]
-      end
+      # chair_width = CHAIR_SEARCH_CONDITION[:width][:ranges][params[:widthRangeId].to_i]
+      # unless chair_width
+      #   puts "widthRangeId invalid: #{params[:widthRangeId]}"
+      #   halt 400
+      # end
 
-      if chair_width[:max] != -1
-        search_queries << 'width < ?'
-        query_params << chair_width[:max]
-      end
+      # if chair_width[:min] != -1
+      #   search_queries << 'width >= ?'
+      #   query_params << chair_width[:min]
+      # end
+
+      # if chair_width[:max] != -1
+      #   search_queries << 'width < ?'
+      #   query_params << chair_width[:max]
+      # end
     end
 
     if params[:depthRangeId] && params[:depthRangeId].size > 0
-      chair_depth = CHAIR_SEARCH_CONDITION[:depth][:ranges][params[:depthRangeId].to_i]
-      unless chair_depth
-        puts "depthRangeId invalid: #{params[:depthRangeId]}"
-        halt 400
-      end
+      search_queries << 'depth_t = ?'
+      query_params << params[:depthRangeId].to_i
+      # chair_depth = CHAIR_SEARCH_CONDITION[:depth][:ranges][params[:depthRangeId].to_i]
+      # unless chair_depth
+      #   puts "depthRangeId invalid: #{params[:depthRangeId]}"
+      #   halt 400
+      # end
 
-      if chair_depth[:min] != -1
-        search_queries << 'depth >= ?'
-        query_params << chair_depth[:min]
-      end
+      # if chair_depth[:min] != -1
+      #   search_queries << 'depth >= ?'
+      #   query_params << chair_depth[:min]
+      # end
 
-      if chair_depth[:max] != -1
-        search_queries << 'depth < ?'
-        query_params << chair_depth[:max]
-      end
+      # if chair_depth[:max] != -1
+      #   search_queries << 'depth < ?'
+      #   query_params << chair_depth[:max]
+      # end
     end
 
     if params[:kind] && params[:kind].size > 0
@@ -397,57 +408,66 @@ class App < Sinatra::Base
     query_params = []
 
     if params[:doorHeightRangeId] && params[:doorHeightRangeId].size > 0
-      door_height = ESTATE_SEARCH_CONDITION[:doorHeight][:ranges][params[:doorHeightRangeId].to_i]
-      unless door_height
-        puts "doorHeightRangeId invalid: #{params[:doorHeightRangeId]}"
-        halt 400
-      end
+      search_queries << 'door_height_t = ?'
+      query_params << params[:doorHeightRangeId].to_i
 
-      if door_height[:min] != -1
-        search_queries << 'door_height >= ?'
-        query_params << door_height[:min]
-      end
+      # door_height = ESTATE_SEARCH_CONDITION[:doorHeight][:ranges][params[:doorHeightRangeId].to_i]
+      # unless door_height
+      #   puts "doorHeightRangeId invalid: #{params[:doorHeightRangeId]}"
+      #   halt 400
+      # end
 
-      if door_height[:max] != -1
-        search_queries << 'door_height < ?'
-        query_params << door_height[:max]
-      end
+      # if door_height[:min] != -1
+      #   search_queries << 'door_height >= ?'
+      #   query_params << door_height[:min]
+      # end
+
+      # if door_height[:max] != -1
+      #   search_queries << 'door_height < ?'
+      #   query_params << door_height[:max]
+      # end
     end
 
     if params[:doorWidthRangeId] && params[:doorWidthRangeId].size > 0
-      door_width = ESTATE_SEARCH_CONDITION[:doorWidth][:ranges][params[:doorWidthRangeId].to_i]
-      unless door_width
-        puts "doorWidthRangeId invalid: #{params[:doorWidthRangeId]}"
-        halt 400
-      end
+      search_queries << 'door_width_t = ?'
+      query_params << params[:doorWidthRangeId].to_i
 
-      if door_width[:min] != -1
-        search_queries << 'door_width >= ?'
-        query_params << door_width[:min]
-      end
+      # door_width = ESTATE_SEARCH_CONDITION[:doorWidth][:ranges][params[:doorWidthRangeId].to_i]
+      # unless door_width
+      #   puts "doorWidthRangeId invalid: #{params[:doorWidthRangeId]}"
+      #   halt 400
+      # end
 
-      if door_width[:max] != -1
-        search_queries << 'door_width < ?'
-        query_params << door_width[:max]
-      end
+      # if door_width[:min] != -1
+      #   search_queries << 'door_width >= ?'
+      #   query_params << door_width[:min]
+      # end
+
+      # if door_width[:max] != -1
+      #   search_queries << 'door_width < ?'
+      #   query_params << door_width[:max]
+      # end
     end
 
     if params[:rentRangeId] && params[:rentRangeId].size > 0
-      rent = ESTATE_SEARCH_CONDITION[:rent][:ranges][params[:rentRangeId].to_i]
-      unless rent
-        puts "rentRangeId invalid: #{params[:rentRangeId]}"
-        halt 400
-      end
+      search_queries << 'rent_t = ?'
+      query_params << params[:rentRangeId].to_i
 
-      if rent[:min] != -1
-        search_queries << 'rent >= ?'
-        query_params << rent[:min]
-      end
+      # rent = ESTATE_SEARCH_CONDITION[:rent][:ranges][params[:rentRangeId].to_i]
+      # unless rent
+      #   puts "rentRangeId invalid: #{params[:rentRangeId]}"
+      #   halt 400
+      # end
 
-      if rent[:max] != -1
-        search_queries << 'rent < ?'
-        query_params << rent[:max]
-      end
+      # if rent[:min] != -1
+      #   search_queries << 'rent >= ?'
+      #   query_params << rent[:min]
+      # end
+
+      # if rent[:max] != -1
+      #   search_queries << 'rent < ?'
+      #   query_params << rent[:max]
+      # end
     end
 
     if params[:features] && params[:features].size > 0

@@ -44,22 +44,23 @@ class App < Sinatra::Base
   end
 
   before do
-    [
-      /ISUCONbot(-Mobile)?/,
-      /ISUCONbot-Image\//,
-      /Mediapartners-ISUCON/,
-      /ISUCONCoffee/,
-      /ISUCONFeedSeeker(Beta)?/,
-      /crawler \(https:\/\/isucon\.invalid\/(support\/faq\/|help\/jp\/)/,
-      /isubot/,
-      /Isupider/,
-      /Isupider(-image)?\+/,
-      /(bot|crawler|spider)(?:[-_ .\/;@()]|$)/i,
-    ].each do |regexp|
-      if regexp.match(request.user_agent)
-        puts "BOT!!!!!!!!111: #{request.user_agent}"
-      end
-    end
+    # [
+    #   /ISUCONbot(-Mobile)?/,
+    #   /ISUCONbot-Image\//,
+    #   /Mediapartners-ISUCON/,
+    #   /ISUCONCoffee/,
+    #   /ISUCONFeedSeeker(Beta)?/,
+    #   /crawler \(https:\/\/isucon\.invalid\/(support\/faq\/|help\/jp\/)/,
+    #   /isubot/,
+    #   /Isupider/,
+    #   /Isupider(-image)?\+/,
+    #   /(bot|crawler|spider)(?:[-_ .\/;@()]|$)/i,
+    # ].each do |regexp|
+    #   if regexp.match(request.user_agent)
+    #     puts "BOT!!!!!!!!111: #{request.user_agent}"
+    #   end
+    # end
+    puts request.user_agent
   end
 
   set :add_charset, ['application/json']

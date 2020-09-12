@@ -590,8 +590,10 @@ class App < Sinatra::Base
     status 200
   end
 
+  ESTATE_SEARCH_CONDITION_JSON = ESTATE_SEARCH_CONDITION.to_json.freeze
+
   get '/api/estate/search/condition' do
-    ESTATE_SEARCH_CONDITION.to_json
+    ESTATE_SEARCH_CONDITION_JSON
   end
 
   get '/api/recommended_estate/:id' do

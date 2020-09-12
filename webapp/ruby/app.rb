@@ -645,19 +645,7 @@ class App < Sinatra::Base
     h = chair[:height]
     d = chair[:depth]
 
-    sql = "SELECT * FROM (
-      SELECT * FROM estate WHERE door_width >= ? AND door_height >= ?
-      UNION
-      SELECT * FROM estate WHERE door_width >= ? AND door_height >= ?
-      UNION
-      SELECT * FROM estate WHERE door_width >= ? AND door_height >= ?
-      UNION
-      SELECT * FROM estate WHERE door_width >= ? AND door_height >= ?
-      UNION
-      SELECT * FROM estate WHERE door_width >= ? AND door_height >= ?
-      UNION
-      SELECT * FROM estate WHERE door_width >= ? AND door_height >= ?
-      ) AS main ORDER BY popularity DESC, id ASC LIMIT #{LIMIT}" # XXX:
+    sql = "SELECT * FROM (SELECT * FROM estate WHERE door_width >= ? AND door_height >= ? UNION SELECT * FROM estate WHERE door_width >= ? AND door_height >= ? UNION SELECT * FROM estate WHERE door_width >= ? AND door_height >= ? UNION SELECT * FROM estate WHERE door_width >= ? AND door_height >= ? UNION SELECT * FROM estate WHERE door_width >= ? AND door_height >= ? UNION SELECT * FROM estate WHERE door_width >= ? AND door_height >= ?) AS main ORDER BY popularity DESC, id ASC LIMIT #{LIMIT}" # XXX:
     
     estates = db.xquery(sql, w, h, w, d, h, w, h, d, d, w, d, h).to_a
 

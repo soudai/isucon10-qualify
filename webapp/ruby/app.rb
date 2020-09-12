@@ -529,7 +529,7 @@ class App < Sinatra::Base
     sql = 'SELECT * FROM estate WHERE latitude <= ? AND latitude >= ? AND longitude <= ? AND longitude >= ? ORDER BY popularity DESC, id ASC'
     estates = db.xquery(sql, bounding_box[:bottom_right][:latitude], bounding_box[:top_left][:latitude], bounding_box[:bottom_right][:longitude], bounding_box[:top_left][:longitude]).to_a
 
-    puts "nazotte: #{estates.size} estates"
+    #puts "nazotte: #{estates.size} estates"
 
     estates_in_polygon = []
     estates.each do |estate|

@@ -94,7 +94,7 @@ CREATE TABLE isuumo.chair
     INDEX idx_price (price),
 
     -- 不要
-    INDEX idx_depth (depth),
+    -- INDEX idx_depth (depth),
 
     -- https://github.com/soudai/isucon10-qualify/blob/1be06d2540eb94244596e9a7b541f7c4caf4c14f/webapp/ruby/app.rb#L175-L183
     --
@@ -102,15 +102,15 @@ CREATE TABLE isuumo.chair
     -- INDEX idx_kind (kind),
     --
     INDEX idx_color_popularity (color, popularity DESC),
-    INDEX idx_kind_popularity (kind, popularity DESC),
+    INDEX idx_kind_popularity (kind, popularity DESC)
 
     -- 常に他の検索条件との複合で必要なので単体では不要
-    INDEX idx_popularity (popularity),
+    -- INDEX idx_popularity (popularity),
 
     -- 不要
-    INDEX idx_stock_price (stock, price),
-    INDEX idx_height_width (height, width),
-    INDEX idx_width_height (width, height)
+    -- INDEX idx_stock_price (stock, price),
+    -- INDEX idx_height_width (height, width),
+    -- INDEX idx_width_height (width, height)
 );
 
 -- https://github.com/soudai/isucon10-qualify/blob/1be06d2540eb94244596e9a7b541f7c4caf4c14f/webapp/ruby/app.rb#L372-L381

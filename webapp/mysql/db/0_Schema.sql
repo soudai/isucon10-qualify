@@ -29,9 +29,14 @@ CREATE TABLE isuumo.estate
     -- 複数index効かせられないMySQLでは種類ごとの同値(=)検索で引っ掛けるのがORDER BYも効かせられる余地があってよい
     -- ORDER BY popularity DESC, id ASC LIMIT #{per_page} OFFSET #{per_page * page} があるので
     -- INDEX idx_rent_t (rent_t, popularity DESC) にしてORDER BY LIMIT optimizationも狙うべきだった(MySQL 8限定)
-    INDEX idx_rent_t (rent_t),
-    INDEX idx_door_height_t (door_height_t),
-    INDEX idx_door_width_t (door_width_t),
+    --
+    -- INDEX idx_rent_t (rent_t),
+    -- INDEX idx_door_height_t (door_height_t),
+    -- INDEX idx_door_width_t (door_width_t),
+    --
+    INDEX idx_rent_t_popularity (rent_t, popularity DESC),
+    INDEX idx_door_height_t_popularity (door_height_t, popularity DESC),
+    INDEX idx_door_width_t_popularity (door_width_t, popularity DESC),
 
     -- https://github.com/soudai/isucon10-qualify/blob/1be06d2540eb94244596e9a7b541f7c4caf4c14f/webapp/ruby/app.rb#L348
     -- SELECT * FROM estate ORDER BY rent ASC, id ASC LIMIT #{LIMIT}
@@ -72,10 +77,16 @@ CREATE TABLE isuumo.chair
     -- 複数index効かせられないMySQLでは種類ごとの同値(=)検索で引っ掛けるのがORDER BYも効かせられる余地があってよい
     -- ORDER BY popularity DESC, id ASC LIMIT #{per_page} OFFSET #{per_page * page} があるので
     -- INDEX idx_price_t (price_t, popularity DESC) にしてORDER BY LIMIT optimizationも狙うべきだった(MySQL 8限定)
-    INDEX idx_price_t (price_t),
-    INDEX idx_height_t (height_t),
-    INDEX idx_width_t (width_t),
-    INDEX idx_depth_t (depth_t),
+    --
+    -- INDEX idx_price_t (price_t),
+    -- INDEX idx_height_t (height_t),
+    -- INDEX idx_width_t (width_t),
+    -- INDEX idx_depth_t (depth_t),
+    --
+    INDEX idx_price_t_popularity (price_t, popularity DESC),
+    INDEX idx_height_t_popularity (height_t, popularity DESC),
+    INDEX idx_width_t_popularity (width_t, popularity DESC),
+    INDEX idx_depth_t_popularity (depth_t, popularity DESC),
 
     -- https://github.com/soudai/isucon10-qualify/blob/1be06d2540eb94244596e9a7b541f7c4caf4c14f/webapp/ruby/app.rb#L146
     -- SELECT * FROM chair WHERE stock > 0 ORDER BY price ASC, id ASC LIMIT #{LIMIT}
@@ -86,8 +97,12 @@ CREATE TABLE isuumo.chair
     INDEX idx_depth (depth),
 
     -- https://github.com/soudai/isucon10-qualify/blob/1be06d2540eb94244596e9a7b541f7c4caf4c14f/webapp/ruby/app.rb#L175-L183
-    INDEX idx_color (color),
-    INDEX idx_kind (kind),
+    --
+    -- INDEX idx_color (color),
+    -- INDEX idx_kind (kind),
+    --
+    INDEX idx_color_popularity (color, popularity DESC),
+    INDEX idx_kind_popularity (kind, popularity DESC),
 
     -- 常に他の検索条件との複合で必要なので単体では不要
     INDEX idx_popularity (popularity),

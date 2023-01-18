@@ -22,7 +22,7 @@ GEM
     nio4r (2.5.3)
     puma (4.3.6)
       nio4r (~> 2.0)
-    rack (2.2.3)
+    rack (2.2.6.2)
     rack-protection (2.1.0)
       rack
     raindrops (0.19.1)
